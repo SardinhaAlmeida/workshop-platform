@@ -28,8 +28,8 @@ resource "aws_eks_cluster" "main" {
   }
 
   access_config {
-    authentication_mode                    = "API_AND_CONFIG_MAP"
-    bootstrap_cluster_creator_admin_access = true
+    authentication_mode                         = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
   }
 
   enabled_cluster_log_types = var.cluster_log_types
@@ -66,16 +66,16 @@ resource "aws_iam_openid_connect_provider" "cluster" {
 # ============================================================================
 # EKS Cluster Admin Access Entries
 # ============================================================================
-
+/*
 data "aws_iam_user" "terraform_ci" {
   user_name = "terraform-ci"
 }
-
+*/
 locals {
   cluster_admin_arns = toset(concat(
     [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
-      data.aws_iam_user.terraform_ci.arn
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      #data.aws_iam_user.terraform_ci.arn
     ],
     var.cluster_admin_arns
   ))

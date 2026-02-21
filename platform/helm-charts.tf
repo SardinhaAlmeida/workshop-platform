@@ -1,7 +1,7 @@
 # ============================================================================
 # AWS Load Balancer Controller
 # ============================================================================
-
+/*
 resource "kubernetes_service_account" "aws_load_balancer_controller" {
   metadata {
     name      = "aws-load-balancer-controller"
@@ -16,6 +16,7 @@ resource "kubernetes_service_account" "aws_load_balancer_controller" {
     aws_eks_fargate_profile.kube_system
   ]
 }
+*/
 
 resource "helm_release" "aws_load_balancer_controller" {
   name       = "aws-load-balancer-controller"
@@ -31,12 +32,12 @@ resource "helm_release" "aws_load_balancer_controller" {
 
   set {
     name  = "serviceAccount.create"
-    value = "false"
+    value = "true"
   }
 
   set {
     name  = "serviceAccount.name"
-    value = kubernetes_service_account.aws_load_balancer_controller.metadata[0].name
+    value = "aws-load-balancer-controller-sa"
   }
 
   set {
@@ -50,7 +51,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   }
 
   depends_on = [
-    kubernetes_service_account.aws_load_balancer_controller,
+    #kubernetes_service_account.aws_load_balancer_controller,
     aws_eks_addon.coredns
   ]
 }
